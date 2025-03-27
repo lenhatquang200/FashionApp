@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
+
+    <ImageView
+        android:id="@+id/assistant_avatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/assistant_avatar_description"
+        android:src="@drawable/placeholder_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/assistant_message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/assistant_message_background"
+        android:maxWidth="280dp"
+        android:padding="12dp"
+        app:layout_constraintStart_toEndOf="@+id/assistant_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hello! I'd be happy to help you with your order. Let me check the status for you. Could you please provide me with your order number?" />
+
+    <TextView
+        android:id="@+id/assistant_message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/assistant_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/assistant_message_text"
+        tools:text="14:31" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

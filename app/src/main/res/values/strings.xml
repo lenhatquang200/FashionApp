@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">E-Commerce App</string>
+    
+    <!-- Navigation -->
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="orders">Orders</string>
+    <string name="profile">Profile</string>
+    <string name="support">Support</string>
+    
+    <!-- Content descriptions -->
+    <string name="app_logo_description">App Logo</string>
+    <string name="product_image_description">Product Image</string>
+    <string name="category_image_description">Category Image</string>
+    <string name="profile_image_description">Profile Image</string>
+    <string name="assistant_avatar_description">Assistant Avatar</string>
+    
+    <!-- Home screen -->
+    <string name="categories">Categories</string>
+    <string name="featured_products">Featured Products</string>
+    <string name="search">Search</string>
+    <string name="search_products">Search products…</string>
+    
+    <!-- Product details -->
+    <string name="product_details">Product Details</string>
+    <string name="description">Description</string>
+    <string name="add_to_cart">Add to Cart</string>
+    
+    <!-- Cart -->
+    <string name="your_cart">Your Cart</string>
+    <string name="your_cart_is_empty">Your cart is empty</string>
+    <string name="checkout">Checkout</string>
+    <string name="continue_shopping">Continue Shopping</string>
+    <string name="remove_from_cart">Remove from cart</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="decrease_quantity">Decrease quantity</string>
+    
+    <!-- Checkout -->
+    <string name="shipping_information">Shipping Information</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="paypal">PayPal</string>
+    <string name="cash_on_delivery">Cash on Delivery</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="place_order">Place Order</string>
+    <string name="cancel">Cancel</string>
+    
+    <!-- Orders -->
+    <string name="my_orders">My Orders</string>
+    <string name="you_have_no_orders">You have no orders yet</string>
+    <string name="order_details">Order Details</string>
+    <string name="order_confirmation">Order Confirmation</string>
+    
+    <!-- Profile -->
+    <string name="profile_information">Profile Information</string>
+    <string name="save_profile">Save Profile</string>
+    
+    <!-- Search -->
+    <string name="search_results">Search Results</string>
+    <string name="no_products_found">No products found</string>
+    
+    <!-- Chatbot -->
+    <string name="type_a_message">Type a message…</string>
+    <string name="send">Send</string>
+</resources>
