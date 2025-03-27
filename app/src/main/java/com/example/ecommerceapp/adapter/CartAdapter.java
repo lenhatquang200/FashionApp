@@ -11,118 +11,145 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerceapp.R;
+import com.example.ecommerceapp.database.DatabaseHelper;
 import com.example.ecommerceapp.model.CartItem;
-import com.example.ecommerceapp.utils.ImageLoader;
 
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Adapter for displaying cart items in a RecyclerView
+ */
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
-
-    private Context context;
+    
+    private final Context context;
     private List<CartItem> cartItems;
-    private OnCartItemActionListener listener;
-    private NumberFormat currencyFormatter;
-
-    public interface OnCartItemActionListener {
-        void onRemoveItem(CartItem cartItem, int position);
-        void onUpdateQuantity(CartItem cartItem, int newQuantity, int position);
+    private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+    private CartItemListener cartItemListener;
+    
+    public interface CartItemListener {
+        void onQuantityChanged();
+        void onItemRemoved(CartItem cartItem);
     }
-
-    public CartAdapter(Context context, List<CartItem> cartItems, OnCartItemActionListener listener) {
+    
+    public CartAdapter(Context context, List<CartItem> cartItems) {
         this.context = context;
         this.cartItems = cartItems;
-        this.listener = listener;
-        this.currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
     }
-
+    
+    public void setCartItemListener(CartItemListener listener) {
+        this.cartItemListener = listener;
+    }
+    
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_cart, parent, false);
-        return new CartViewHolder(itemView);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_cart, parent, false);
+        return new CartViewHolder(view);
     }
-
+    
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
-        holder.bind(cartItem, position);
+        
+        holder.productNameTextView.setText(cartItem.getProduct().getName());
+        holder.productPriceTextView.setText(currencyFormat.format(cartItem.getPriceAtAddition()));
+        holder.productQuantityTextView.setText(String.valueOf(cartItem.getQuantity()));
+        
+        // Calculate and set subtotal
+        double subtotal = cartItem.getQuantity() * cartItem.getPriceAtAddition();
+        holder.productSubtotalTextView.setText(currencyFormat.format(subtotal));
+        
+        // Load product image using Glide
+        Glide.with(context)
+                .load(cartItem.getProduct().getImageUrl())
+                .placeholder(R.drawable.placeholder_product)
+                .error(R.drawable.placeholder_product)
+                .into(holder.productImageView);
+        
+        // Set click listeners for quantity adjustment
+        holder.increaseQuantityButton.setOnClickListener(v -> {
+            int newQuantity = cartItem.getQuantity() + 1;
+            updateCartItemQuantity(cartItem, holder, newQuantity);
+        });
+        
+        holder.decreaseQuantityButton.setOnClickListener(v -> {
+            if (cartItem.getQuantity() > 1) {
+                int newQuantity = cartItem.getQuantity() - 1;
+                updateCartItemQuantity(cartItem, holder, newQuantity);
+            }
+        });
+        
+        holder.removeItemButton.setOnClickListener(v -> {
+            DatabaseHelper db = DatabaseHelper.getInstance(context);
+            db.removeCartItem(cartItem.getId());
+            
+            cartItems.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, cartItems.size());
+            
+            if (cartItemListener != null) {
+                cartItemListener.onItemRemoved(cartItem);
+            }
+        });
     }
-
+    
+    private void updateCartItemQuantity(CartItem cartItem, CartViewHolder holder, int newQuantity) {
+        DatabaseHelper db = DatabaseHelper.getInstance(context);
+        db.updateCartItemQuantity(cartItem.getId(), newQuantity);
+        
+        cartItem.setQuantity(newQuantity);
+        holder.productQuantityTextView.setText(String.valueOf(newQuantity));
+        
+        // Update subtotal
+        double subtotal = newQuantity * cartItem.getPriceAtAddition();
+        holder.productSubtotalTextView.setText(currencyFormat.format(subtotal));
+        
+        if (cartItemListener != null) {
+            cartItemListener.onQuantityChanged();
+        }
+    }
+    
     @Override
     public int getItemCount() {
-        return cartItems.size();
+        return cartItems == null ? 0 : cartItems.size();
     }
-
-    public void updateCartItems(List<CartItem> newCartItems) {
-        this.cartItems = newCartItems;
+    
+    /**
+     * Update the adapter data
+     * @param cartItems new list of cart items
+     */
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
         notifyDataSetChanged();
     }
-
-    class CartViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageProduct;
-        TextView textProductName;
-        TextView textProductPrice;
-        TextView textQuantity;
-        ImageButton buttonMinus;
-        ImageButton buttonPlus;
-        ImageButton buttonRemove;
-        TextView textTotalPrice;
-
+    
+    /**
+     * ViewHolder class for cart items
+     */
+    static class CartViewHolder extends RecyclerView.ViewHolder {
+        ImageView productImageView;
+        TextView productNameTextView;
+        TextView productPriceTextView;
+        TextView productQuantityTextView;
+        TextView productSubtotalTextView;
+        ImageButton increaseQuantityButton;
+        ImageButton decreaseQuantityButton;
+        ImageButton removeItemButton;
+        
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageProduct = itemView.findViewById(R.id.image_product);
-            textProductName = itemView.findViewById(R.id.text_product_name);
-            textProductPrice = itemView.findViewById(R.id.text_product_price);
-            textQuantity = itemView.findViewById(R.id.text_quantity);
-            buttonMinus = itemView.findViewById(R.id.button_minus);
-            buttonPlus = itemView.findViewById(R.id.button_plus);
-            buttonRemove = itemView.findViewById(R.id.button_remove);
-            textTotalPrice = itemView.findViewById(R.id.text_total_price);
-        }
-
-        public void bind(final CartItem cartItem, final int position) {
-            textProductName.setText(cartItem.getProductName());
-            textProductPrice.setText(currencyFormatter.format(cartItem.getProductPrice()));
-            textQuantity.setText(String.valueOf(cartItem.getQuantity()));
-            textTotalPrice.setText(currencyFormatter.format(cartItem.getTotalPrice()));
-            
-            // Load product image
-            ImageLoader.loadImage(context, cartItem.getImageUrl(), imageProduct);
-            
-            // Set click listeners
-            buttonMinus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int newQuantity = cartItem.getQuantity() - 1;
-                    if (newQuantity > 0) {
-                        if (listener != null) {
-                            listener.onUpdateQuantity(cartItem, newQuantity, position);
-                        }
-                    }
-                }
-            });
-            
-            buttonPlus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int newQuantity = cartItem.getQuantity() + 1;
-                    if (listener != null) {
-                        listener.onUpdateQuantity(cartItem, newQuantity, position);
-                    }
-                }
-            });
-            
-            buttonRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        listener.onRemoveItem(cartItem, position);
-                    }
-                }
-            });
+            productImageView = itemView.findViewById(R.id.cart_item_image);
+            productNameTextView = itemView.findViewById(R.id.cart_item_name);
+            productPriceTextView = itemView.findViewById(R.id.cart_item_price);
+            productQuantityTextView = itemView.findViewById(R.id.cart_item_quantity);
+            productSubtotalTextView = itemView.findViewById(R.id.cart_item_subtotal);
+            increaseQuantityButton = itemView.findViewById(R.id.cart_item_increase);
+            decreaseQuantityButton = itemView.findViewById(R.id.cart_item_decrease);
+            removeItemButton = itemView.findViewById(R.id.cart_item_remove);
         }
     }
 }

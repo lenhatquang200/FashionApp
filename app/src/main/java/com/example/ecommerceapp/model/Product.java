@@ -1,54 +1,42 @@
 package com.example.ecommerceapp.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Product implements Parcelable {
-    private int id;
+/**
+ * Model class for Product
+ */
+public class Product implements Serializable {
+    private long id;
     private String name;
     private String description;
     private double price;
-    private int categoryId;
     private String imageUrl;
-    private int stock;
+    private int categoryId;
+    private int stockQuantity;
+    private float rating;
+    private boolean isFeatured;
 
-    public Product(int id, String name, String description, double price, int categoryId, String imageUrl, int stock) {
+    public Product() {
+    }
+
+    public Product(long id, String name, String description, double price, String imageUrl, 
+                  int categoryId, int stockQuantity, float rating, boolean isFeatured) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.categoryId = categoryId;
         this.imageUrl = imageUrl;
-        this.stock = stock;
+        this.categoryId = categoryId;
+        this.stockQuantity = stockQuantity;
+        this.rating = rating;
+        this.isFeatured = isFeatured;
     }
 
-    protected Product(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        description = in.readString();
-        price = in.readDouble();
-        categoryId = in.readInt();
-        imageUrl = in.readString();
-        stock = in.readInt();
-    }
-
-    public static final Creator<Product> CREATOR = new Creator<Product>() {
-        @Override
-        public Product createFromParcel(Parcel in) {
-            return new Product(in);
-        }
-
-        @Override
-        public Product[] newArray(int size) {
-            return new Product[size];
-        }
-    };
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -76,14 +64,6 @@ public class Product implements Parcelable {
         this.price = price;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -92,27 +72,45 @@ public class Product implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public int getStock() {
-        return stock;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeDouble(price);
-        dest.writeInt(categoryId);
-        dest.writeString(imageUrl);
-        dest.writeInt(stock);
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", categoryId=" + categoryId +
+                '}';
     }
 }

@@ -1,34 +1,44 @@
 package com.example.ecommerceapp.model;
 
+/**
+ * Model class for User
+ */
 public class User {
-    private int id;
-    private String name;
+    private long id;
+    private String username;
     private String email;
+    private String fullName;
     private String address;
     private String phone;
+    private String passwordHash;
 
-    public User(int id, String name, String email, String address, String phone) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.phone = phone;
+    public User() {
     }
 
-    public int getId() {
+    public User(long id, String username, String email, String fullName, String address, String phone, String passwordHash) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.passwordHash = passwordHash;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -37,6 +47,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getAddress() {
@@ -53,5 +71,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }

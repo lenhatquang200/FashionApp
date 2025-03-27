@@ -1,35 +1,40 @@
 package com.example.ecommerceapp.model;
 
+/**
+ * Model class for Shopping Cart Item
+ */
 public class CartItem {
-    private int id;
-    private int productId;
+    private long id;
+    private long productId;
     private int quantity;
-    private String productName;
-    private double productPrice;
-    private String imageUrl;
+    private double priceAtAddition;
+    
+    // Non-database fields
+    private Product product;
 
-    public CartItem(int id, int productId, int quantity, String productName, double productPrice, String imageUrl) {
+    public CartItem() {
+    }
+
+    public CartItem(long id, long productId, int quantity, double priceAtAddition) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.imageUrl = imageUrl;
+        this.priceAtAddition = priceAtAddition;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
@@ -41,31 +46,27 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public String getProductName() {
-        return productName;
+    public double getPriceAtAddition() {
+        return priceAtAddition;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setPriceAtAddition(double priceAtAddition) {
+        this.priceAtAddition = priceAtAddition;
     }
 
-    public double getProductPrice() {
-        return productPrice;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductPrice(double productPrice) {
-        this.productPrice = productPrice;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public double getTotalPrice() {
-        return productPrice * quantity;
+    /**
+     * Calculate the subtotal for this cart item
+     * @return The total price for this item (quantity × price)
+     */
+    public double getSubtotal() {
+        return quantity * priceAtAddition;
     }
 }

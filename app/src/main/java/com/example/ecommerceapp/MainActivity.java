@@ -5,59 +5,79 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.Fragment;
 
+import com.example.ecommerceapp.ui.cart.CartFragment;
+import com.example.ecommerceapp.ui.categories.CategoriesFragment;
+import com.example.ecommerceapp.ui.home.HomeFragment;
+import com.example.ecommerceapp.ui.orders.OrdersFragment;
+import com.example.ecommerceapp.ui.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
-
-    private NavController navController;
+/**
+ * Main activity for the E-commerce app
+ * Contains bottom navigation and hosts various fragments
+ */
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    
     private BottomNavigationView bottomNavigationView;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setupNavigation();
-    }
-
-    private void setupNavigation() {
+        
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
-        // Setup the bottom navigation view with the nav controller
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeFragment, R.id.searchFragment, R.id.cartFragment, 
-                R.id.orderHistoryFragment, R.id.profileFragment)
-                .build();
-
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-        // Handle custom navigation
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.homeFragment:
-                    case R.id.searchFragment:
-                    case R.id.cartFragment:
-                    case R.id.orderHistoryFragment:
-                    case R.id.profileFragment:
-                        navController.navigate(item.getItemId());
-                        return true;
-                }
-                return false;
-            }
-        });
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        
+        // Load the home fragment by default
+        if (savedInstanceState == null) {
+            loadFragment(new HomeFragment());
+        }
     }
-
+    
     @Override
-    public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(navController, (DrawerLayout) null) || super.onSupportNavigateUp();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+        
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                fragment = new HomeFragment();
+                break;
+                
+            case R.id.nav_categories:
+                fragment = new CategoriesFragment();
+                break;
+                
+            case R.id.nav_cart:
+                fragment = new CartFragment();
+                break;
+                
+            case R.id.nav_orders:
+                fragment = new OrdersFragment();
+                break;
+                
+            case R.id.nav_profile:
+                fragment = new ProfileFragment();
+                break;
+        }
+        
+        return loadFragment(fragment);
+    }
+    
+    /**
+     * Load a fragment into the container
+     * @param fragment Fragment to load
+     * @return true if fragment was loaded successfully
+     */
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
     }
 }

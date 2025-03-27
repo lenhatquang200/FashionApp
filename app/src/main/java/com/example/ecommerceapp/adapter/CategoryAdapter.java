@@ -1,73 +1,90 @@
 package com.example.ecommerceapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerceapp.R;
 import com.example.ecommerceapp.model.Category;
+import com.example.ecommerceapp.ui.products.ProductListActivity;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying categories in a RecyclerView
+ */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-
-    private Context context;
+    
+    private final Context context;
     private List<Category> categoryList;
-    private OnCategoryClickListener listener;
-
-    public interface OnCategoryClickListener {
-        void onCategoryClick(Category category, int position);
-    }
-
-    public CategoryAdapter(Context context, List<Category> categoryList, OnCategoryClickListener listener) {
+    
+    public CategoryAdapter(Context context, List<Category> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
-        this.listener = listener;
     }
-
+    
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
-        return new CategoryViewHolder(itemView);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
+        return new CategoryViewHolder(view);
     }
-
+    
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categoryList.get(position);
-        holder.bind(category, position);
+        
+        holder.categoryNameTextView.setText(category.getName());
+        
+        // Load category image using Glide
+        Glide.with(context)
+                .load(category.getImageUrl())
+                .placeholder(R.drawable.placeholder_category)
+                .error(R.drawable.placeholder_category)
+                .into(holder.categoryImageView);
+        
+        // Set click listener
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductListActivity.class);
+            intent.putExtra("category_id", category.getId());
+            intent.putExtra("category_name", category.getName());
+            context.startActivity(intent);
+        });
     }
-
+    
     @Override
     public int getItemCount() {
-        return categoryList.size();
+        return categoryList == null ? 0 : categoryList.size();
     }
-
-    class CategoryViewHolder extends RecyclerView.ViewHolder {
-        TextView textCategoryName;
-
+    
+    /**
+     * Update the adapter data
+     * @param categoryList new list of categories
+     */
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+        notifyDataSetChanged();
+    }
+    
+    /**
+     * ViewHolder class for category items
+     */
+    static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        ImageView categoryImageView;
+        TextView categoryNameTextView;
+        
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            textCategoryName = itemView.findViewById(R.id.text_category_name);
-        }
-
-        public void bind(final Category category, final int position) {
-            textCategoryName.setText(category.getName());
-            
-            // Set click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        listener.onCategoryClick(category, position);
-                    }
-                }
-            });
+            categoryImageView = itemView.findViewById(R.id.category_image);
+            categoryNameTextView = itemView.findViewById(R.id.category_name);
         }
     }
 }

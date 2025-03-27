@@ -1,36 +1,25 @@
 package com.example.ecommerceapp.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Category implements Parcelable {
+/**
+ * Model class for Product Category
+ */
+public class Category implements Serializable {
     private int id;
     private String name;
     private String description;
+    private String imageUrl;
 
-    public Category(int id, String name, String description) {
+    public Category() {
+    }
+
+    public Category(int id, String name, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.imageUrl = imageUrl;
     }
-
-    protected Category(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        description = in.readString();
-    }
-
-    public static final Creator<Category> CREATOR = new Creator<Category>() {
-        @Override
-        public Category createFromParcel(Parcel in) {
-            return new Category(in);
-        }
-
-        @Override
-        public Category[] newArray(int size) {
-            return new Category[size];
-        }
-    };
 
     public int getId() {
         return id;
@@ -56,15 +45,19 @@ public class Category implements Parcelable {
         this.description = description;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
