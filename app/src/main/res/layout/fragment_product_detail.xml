@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProductDetailFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image_product"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/product_image"
+            tools:src="@drawable/placeholder_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/text_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="Product Name" />
+
+            <TextView
+                android:id="@+id/text_product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="$99.99" />
+
+            <TextView
+                android:id="@+id/text_product_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                tools:text="In Stock: 50" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_product_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                tools:text="This is a detailed description of the product including its features and benefits." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_add_to_cart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/add_to_cart"
+                    android:textAllCaps="false"
+                    style="@style/Widget.AppCompat.Button.Colored" />
+
+                <Button
+                    android:id="@+id/button_buy_now"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/buy_now"
+                    android:textAllCaps="false"
+                    style="@style/Widget.AppCompat.Button" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
